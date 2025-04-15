@@ -1,1 +1,99 @@
-@use '@/assets/styles/ui.scss';
+// @use "@/assets/styles/ui.scss";
+
+// /* Main container for the login page */
+// .login-container {
+// 	display: flex;
+// 	justify-content: center;
+// 	align-items: center;
+// 	height: 100vh;
+// 	background: linear-gradient(135deg, #f80000 0%, #ffe100 100%);
+// }
+
+// /* Card (Div) for the login form */
+// .login-card {
+// 	width: 400px;
+// 	padding: 2rem;
+// 	border-radius: 10px;
+// 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+// 	background-color: white;
+// }
+
+// /* Login title */
+// .login-title {
+// 	text-align: center;
+// 	font-size: 2rem;
+// 	color: #f92100;
+// 	margin-bottom: 2rem;
+// 	font-weight: bold;
+// }
+
+// // Text Fields & Buttons
+// .v-text-field {
+// 	margin-bottom: 1.5rem;
+// }
+
+// .login-actions {
+// 	display: flex;
+// 	justify-content: space-between;
+// 	gap: 1rem;
+// }
+
+// .login-button .v-btn {
+// 	width: 48%;
+// }
+
+// .forgot-button .v-btn {
+// 	width: 48%;
+// }
+
+// .register-button .v-btn {
+// 	width: 48%;
+// 	background-color: #f92100;
+// 	color: white;
+// }
+
+// .register-button .v-btn:hover {
+// 	background-color: #d91d00;
+// }
+
+// .login-alert {
+// 	margin-bottom: 1rem;
+// }
+
+// .reset-actions {
+// 	display: flex;
+// 	justify-content: space-between;
+// 	text-align: center;
+// }
+
+// .reset-card {
+// 	padding: 1.5rem;
+// 	border-radius: 10px;
+// 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+// 	background-color: white;
+// }
+
+// .reset-title {
+// 	text-align: center;
+// 	color: #f92100;
+// 	margin-bottom: 1rem;
+// }
+
+// .v-dialog {
+// 	max-width: 500px;
+// }
+
+// .v-btn:hover {
+// 	background-color: #f92100;
+// 	color: white;
+// 	transition: all 0.3s ease;
+// }
+
+// .v-btn[disabled] {
+// 	background-color: #d1d1d1;
+// 	color: #a2a2a2;
+// }
+
+// .v-text-field input:focus {
+// 	border-color: #f92100;
+// }
