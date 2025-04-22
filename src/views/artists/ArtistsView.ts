@@ -25,13 +25,12 @@ export default {
 	},
 	computed: {
 		...mapState({
-			artists() {
-				return this.$store.state.artists.artistsList
-			}
+			artists: (state) => state.artists.artistsList,
+			genres: (state) => state.artists.genres
 		})
 	},
 	created() {
-		this.getArtists()
+		this.getArtists(), this.$store.dispatch("artists/getGenres")
 	},
 	methods: {
 		getArtists() {
@@ -109,9 +108,11 @@ export default {
 			formData.append("country", this.selectedArtist.country)
 			formData.append("genre_id", this.selectedArtist.genre_id)
 
-			if (this.selectedArtist.file) {
+			if (this.selectedArtist.file instanceof File) {
 				formData.append("file", this.selectedArtist.file)
 			}
+
+			console.log("🧪 FormData:", [...formData.entries()])
 
 			this.$store
 				.dispatch("artists/updateArtist", {
@@ -121,17 +122,29 @@ export default {
 				.then(() => {
 					this.editDialog = false
 					this.artistIsUpdating = false
-					this.getArtists() // refresh the list
+					for (const pair of formData.entries()) {
+						console.log(pair[0] + ": " + pair[1])
+					}
+					this.$store.dispatch("artists/getArtists") // force refresh from backend
 				})
 				.catch((error) => {
 					console.error("Update error:", error)
 					this.artistIsUpdating = false
 				})
 		},
-
-		deleteArtist(artistId) {
+		deleteArtist() {
 			if (confirm("Are you sure you want to delete this artist?")) {
-				this.$store.dispatch("artists/deleteArtist", artistId)
+				this.$store.dispatch(
+					"artists/deleteArtist",
+					this.selectedArtist
+				)
+				this.deleteDialog = false
+			}
+		},
+		onEditArtistFileChange(event) {
+			const file = event?.target?.files?.[0] || event
+			if (file) {
+				this.selectedArtist.file = file
 			}
 		}
 	}

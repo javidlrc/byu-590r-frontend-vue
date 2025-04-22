@@ -1,4 +1,7 @@
+import axios from "axios"
 import artistService from "../services/artists.service"
+import API_URL from "../services/env"
+import authHeader from "../services/auth-header"
 
 const initialState = {
 	artistsList: [],
@@ -21,22 +24,22 @@ export const artists = {
 				return Promise.resolve(response.artist)
 			})
 		},
-		updateArtist({ commit, getters }, artist) {
-			return artistService.updateArtist(artist).then((response) => {
-				response.artist.index = getters.getArtistStateIndexByID(
-					response.artist.id
-				)
-				commit("setArtist", response.artist)
-				return Promise.resolve(response.artist)
-			})
+		updateArtist({ commit, getters }, { artistId, artistData }) {
+			return artistService
+				.updateArtist({ artistId, artistData }) // 👈 artistData is a FormData
+				.then((updatedArtist) => {
+					updatedArtist.index = getters.getArtistStateIndexByID(
+						updatedArtist.id
+					)
+					commit("setArtist", updatedArtist)
+					return Promise.resolve(updatedArtist)
+				})
 		},
 		deleteArtist({ commit, getters }, artist) {
-			return artistService.deleteArtist(artist).then((response) => {
-				response.artist.index = getters.getArtistStateIndexByID(
-					response.artist.id
-				)
-				commit("removeArtist", response.artist)
-				return Promise.resolve(response.artist)
+			return artistService.deleteArtist(artist.id).then((response) => {
+				artist.index = getters.getArtistStateIndexByID(artist.id)
+				commit("removeArtist", artist)
+				return Promise.resolve(response)
 			})
 		},
 		updateArtistPicture({ commit, getters }, artist) {
@@ -49,13 +52,18 @@ export const artists = {
 					commit("updateArtistPicture", response.artist)
 					return Promise.resolve(response.artist)
 				})
+		},
+		getGenres({ commit }) {
+			return axios
+				.get(API_URL + "genres", { headers: authHeader() })
+				.then((res) => {
+					commit("setGenres", res.data)
+				})
 		}
 	},
 	mutations: {
 		setArtists(state, artists) {
 			state.artistsList = artists.map((artist) => {
-				artist.available_qty =
-					artist.inventory_total_qty - artist.checked_qty
 				return artist
 			})
 			state.genres = []
@@ -74,18 +82,23 @@ export const artists = {
 			state.genres = Array.from(genreMap.values())
 		},
 		addArtist(state, artist) {
-			artist.available_qty =
-				artist.inventory_total_qty - artist.checked_qty
 			state.artistsList.push(artist)
 		},
 		setArtist(state, artist) {
 			state.artistsList[artist.index] = artist
 		},
 		removeArtist(state, artist) {
-			state.artistsList.splice(artist.index + 1, 1)
+			if (!artist || typeof artist.id !== "number") return
+			const index = state.artistsList.findIndex((a) => a.id === artist.id)
+			if (index !== -1) {
+				state.artistsList.splice(index, 1)
+			}
 		},
 		updateArtistPicture(state, artist) {
 			state.artistsList[artist.index].file = artist.file
+		},
+		setGenres(state, genres) {
+			state.genres = genres
 		}
 	},
 	getters: {

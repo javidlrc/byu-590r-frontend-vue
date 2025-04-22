@@ -17,7 +17,7 @@
 			xl="3"
 			xxl="2"
 		>
-			<v-card class="artist-card">
+			<v-card :key="artist.id" class="artist-card">
 				<!-- Display Image If Available -->
 				<v-img
 					:src="artist.file"
@@ -49,7 +49,10 @@
 				</v-card-title>
 				<v-card-subtitle>{{ artist.description }}</v-card-subtitle>
 				<v-card-text>
-					<p><strong>Genre ID:</strong> {{ artist.genre_id }}</p>
+					<p>
+						<strong>Genre:</strong>
+						{{ artist.genre?.name || "Unknown" }}
+					</p>
 					<p>
 						<strong>Favorite Song:</strong>
 						{{ artist.favoriteSong }}
@@ -68,26 +71,39 @@
 		<v-card>
 			<v-card-title>Edit Artist</v-card-title>
 			<v-card-text>
-				<v-text-field
-					label="Name"
-					v-model="selectedArtist.name"
-				></v-text-field>
+				<v-text-field label="Name" v-model="selectedArtist.name" />
 				<v-textarea
 					label="Description"
 					v-model="selectedArtist.description"
-				></v-textarea>
+				/>
 				<v-text-field
 					label="Favorite Song"
 					v-model="selectedArtist.favoriteSong"
-				></v-text-field>
+				/>
 				<v-text-field
 					label="Favorite Album"
 					v-model="selectedArtist.favAlbum"
-				></v-text-field>
+				/>
 				<v-text-field
 					label="Country"
 					v-model="selectedArtist.country"
-				></v-text-field>
+				/>
+
+				<!-- Genre Selector -->
+				<v-select
+					label="Select Genre"
+					:items="genres"
+					item-value="id"
+					item-title="name"
+					v-model="selectedArtist.genre_id"
+				/>
+
+				<!-- Image Uploader -->
+				<v-file-input
+					label="Upload New Artist Image"
+					accept="image/*"
+					@change="onEditArtistFileChange"
+				/>
 			</v-card-text>
 			<v-card-actions>
 				<v-btn color="primary" @click="updateArtist">Save</v-btn>
@@ -106,6 +122,7 @@
 			>
 			<v-card-actions>
 				<v-btn color="red" @click="deleteArtist">Delete</v-btn>
+
 				<v-btn @click="deleteDialog = false">Cancel</v-btn>
 			</v-card-actions>
 		</v-card>
@@ -157,11 +174,13 @@
 					label="Country"
 					v-model="newArtist.country"
 				></v-text-field>
-				<v-text-field
-					label="Genre ID"
-					type="number"
+				<v-select
+					label="Select Genre"
+					:items="genres"
+					item-value="id"
+					item-title="name"
 					v-model="newArtist.genre_id"
-				></v-text-field>
+				/>
 				<v-file-input
 					label="Upload Artist Image"
 					accept="image/*"

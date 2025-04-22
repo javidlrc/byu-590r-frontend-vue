@@ -17,12 +17,12 @@ class ArtistsService {
 			.then((response) => response.data.data) // returns { artist: ... }
 	}
 
-	updateArtist(artist: { artistId: number; artistData: FormData }) {
+	updateArtist({ artistId, artistData }) {
 		return axios
-			.put(API_URL + "artists/" + artist.artistId, artist.artistData, {
-				headers: authHeader()
+			.put(`${API_URL}artists/${artistId}`, artistData, {
+				headers: authHeader("multipart")
 			})
-			.then((response) => response.data.data)
+			.then((response) => response.data.data.artist) // adjust depending on your backend return
 	}
 
 	deleteArtist(artistId: number) {
