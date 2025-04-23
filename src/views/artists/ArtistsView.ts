@@ -112,7 +112,7 @@ export default {
 				formData.append("file", this.selectedArtist.file)
 			}
 
-			console.log("🧪 FormData:", [...formData.entries()])
+			//console.log("🧪 FormData:", [...formData.entries()])
 
 			this.$store
 				.dispatch("artists/updateArtist", {
@@ -122,9 +122,6 @@ export default {
 				.then(() => {
 					this.editDialog = false
 					this.artistIsUpdating = false
-					for (const pair of formData.entries()) {
-						console.log(pair[0] + ": " + pair[1])
-					}
 					this.$store.dispatch("artists/getArtists") // force refresh from backend
 				})
 				.catch((error) => {
